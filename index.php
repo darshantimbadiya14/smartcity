@@ -12,6 +12,14 @@ declare(strict_types=1);
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="assets/css/style.css">
+    <script type="importmap">
+    {
+        "imports": {
+            "three": "https://cdn.jsdelivr.net/npm/three@0.185.1/build/three.module.js",
+            "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.185.1/examples/jsm/"
+        }
+    }
+    </script>
 </head>
 <body>
 
@@ -90,7 +98,12 @@ declare(strict_types=1);
             </aside>
 
             <div class="game-canvas-wrap">
-                <div id="game-canvas">3D scene coming soon</div>
+                <div id="game-canvas">
+                    <div id="tile-info" class="tile-info">
+                        <p id="tile-info-message" class="tile-info-message">Click a tile to inspect it.</p>
+                        <button type="button" id="tile-info-confirm" class="tile-info-confirm hidden">Unlock</button>
+                    </div>
+                </div>
             </div>
         </div>
     </section>

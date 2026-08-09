@@ -308,14 +308,59 @@ button {
 }
 
 #game-canvas {
+    position: relative;
     flex: 1;
     background: #e6e6e6;
     border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-soft);
+}
+
+#game-canvas canvas {
+    display: block;
+}
+
+.tile-info {
+    position: absolute;
+    top: 14px;
+    left: 14px;
+    z-index: 2;
     display: flex;
     align-items: center;
-    justify-content: center;
-    color: #9a9a9a;
-    font-size: 1.1rem;
-    font-weight: 700;
+    gap: 10px;
+    max-width: calc(100% - 28px);
+    background: var(--card);
+    color: var(--text);
+    padding: 8px 10px 8px 14px;
+    border-radius: var(--radius-sm);
     box-shadow: var(--shadow-soft);
+}
+
+.tile-info-message {
+    margin: 0;
+    font-weight: 700;
+    font-size: 0.85rem;
+}
+
+.tile-info-confirm {
+    flex-shrink: 0;
+    border: none;
+    border-radius: var(--radius-sm);
+    padding: 7px 14px;
+    font-family: inherit;
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: #fff;
+    background: var(--cta-amber);
+    cursor: pointer;
+    transition: background 0.15s ease;
+}
+
+.tile-info-confirm:hover {
+    background: var(--cta-amber-hover);
+}
+
+.tile-info-confirm:disabled {
+    opacity: 0.65;
+    cursor: default;
 }

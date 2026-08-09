@@ -63,10 +63,60 @@
             });
     }
 
+    var cityLoaded = false;
+
+    var hudBudget = document.getElementById('hud-budget');
+    var hudPopulation = document.getElementById('hud-population');
+    var hudHappiness = document.getElementById('hud-happiness');
+    var hudScore = document.getElementById('hud-score');
+
+    function renderCity(city) {
+        if (hudBudget) {
+            hudBudget.textContent = formatCost(city.budget);
+        }
+        if (hudPopulation) {
+            hudPopulation.textContent = String(city.population);
+        }
+        if (hudHappiness) {
+            hudHappiness.textContent = String(city.happiness);
+        }
+        if (hudScore) {
+            hudScore.textContent = String(city.score);
+        }
+    }
+
+    function loadCity() {
+        fetch('api/city.php', { credentials: 'same-origin' })
+            .then(function (response) { return response.json(); })
+            .then(function (body) {
+                if (body.status !== 'success') {
+                    return;
+                }
+
+                renderCity(body.data.city);
+
+                window.__smartCity = {
+                    city: body.data.city,
+                    unlockedTiles: body.data.unlocked_tiles,
+                    tileUnlockCost: body.data.tile_unlock_cost,
+                    gridSize: body.data.grid_size,
+                };
+
+                document.dispatchEvent(new CustomEvent('city:loaded', { detail: window.__smartCity }));
+            })
+            .catch(function () {
+                /* HUD keeps its placeholder values if this fails */
+            });
+    }
+
     document.addEventListener('game:shown', function () {
         if (!loaded) {
             loaded = true;
             loadBuildingTypes();
+        }
+        if (!cityLoaded) {
+            cityLoaded = true;
+            loadCity();
         }
     });
 })();

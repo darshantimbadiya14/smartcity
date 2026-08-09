@@ -10,6 +10,8 @@
     var registerForm = document.getElementById('register-form');
     var logoutBtn = document.getElementById('logout-btn');
 
+    var threeSceneStarted = false;
+
     function showError(message) {
         formError.textContent = message;
         formError.classList.remove('success');
@@ -52,6 +54,17 @@
         authScreen.classList.add('hidden');
         gameShell.classList.remove('hidden');
         document.dispatchEvent(new CustomEvent('game:shown'));
+
+        if (!threeSceneStarted) {
+            threeSceneStarted = true;
+            import('./three-scene.js')
+                .then(function (module) {
+                    module.init();
+                })
+                .catch(function (err) {
+                    console.error('Failed to load 3D scene:', err);
+                });
+        }
     }
 
     function postJson(url, payload) {
