@@ -2,3 +2,6 @@
 vendor/
 node_modules/
 debug.log
+
+# Database exports — contain user password hashes, never deploy or commit these
+*.sql

@@ -1,0 +1,719 @@
+/* ==========================================================================
+   Smart City — Admin Panel
+   Builds on the palette defined in style.css so the admin area matches the game.
+   ========================================================================== */
+
+:root {
+    --admin-sidebar-w: 236px;
+    --admin-ink: #3a3226;
+    --admin-line: #efe6d6;
+}
+
+.admin-body {
+    display: flex;
+    min-height: 100vh;
+    margin: 0;
+    background: var(--bg);
+}
+
+/* ---------- Sidebar ---------- */
+
+.admin-sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+    width: var(--admin-sidebar-w);
+    height: 100vh;
+    padding: 22px 16px;
+    background: var(--card);
+    box-shadow: var(--shadow-soft);
+    overflow-y: auto;
+}
+
+.admin-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 28px;
+    padding: 0 8px;
+    color: var(--text);
+    text-decoration: none;
+}
+
+.admin-brand-mark {
+    font-size: 1.5rem;
+    line-height: 1;
+}
+
+.admin-brand strong {
+    display: block;
+    font-family: 'Baloo 2', 'Quicksand', sans-serif;
+    font-size: 1.05rem;
+    font-weight: 700;
+}
+
+.admin-brand em {
+    display: block;
+    font-size: 0.72rem;
+    font-style: normal;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+}
+
+.admin-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.admin-nav-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    border-radius: var(--radius-sm);
+    font-size: 0.92rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: background 0.15s ease, color 0.15s ease;
+}
+
+.admin-nav-link:hover {
+    background: var(--bg);
+    color: var(--text);
+}
+
+.admin-nav-link.is-active {
+    background: rgba(255, 159, 67, 0.16);
+    color: var(--cta-amber-hover);
+}
+
+.admin-nav-icon {
+    width: 20px;
+    font-size: 1rem;
+    text-align: center;
+}
+
+.admin-sidebar-footer {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    margin-top: auto;
+    padding-top: 16px;
+    border-top: 1px solid var(--admin-line);
+}
+
+/* ---------- Main column ---------- */
+
+.admin-main {
+    flex: 1;
+    min-width: 0;
+    margin-left: var(--admin-sidebar-w);
+    display: flex;
+    flex-direction: column;
+}
+
+.admin-topbar {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 20px 32px;
+    background: var(--card);
+    box-shadow: var(--shadow-soft);
+}
+
+.admin-page-title {
+    margin: 0;
+    font-family: 'Baloo 2', 'Quicksand', sans-serif;
+    font-size: 1.4rem;
+    font-weight: 700;
+}
+
+.admin-topbar-user {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-left: auto;
+}
+
+.admin-user-meta {
+    text-align: right;
+    line-height: 1.25;
+}
+
+.admin-user-meta strong {
+    display: block;
+    font-size: 0.9rem;
+}
+
+.admin-user-meta em {
+    display: block;
+    font-size: 0.76rem;
+    font-style: normal;
+    color: var(--text-muted);
+}
+
+.admin-content {
+    flex: 1;
+    padding: 28px 32px 48px;
+}
+
+/* ---------- Flash messages ---------- */
+
+.admin-flash {
+    margin-bottom: 20px;
+    padding: 13px 16px;
+    border-radius: var(--radius-sm);
+    font-size: 0.92rem;
+    font-weight: 700;
+}
+
+.admin-flash-success {
+    background: var(--money-green-soft);
+    color: var(--money-green);
+}
+
+.admin-flash-error {
+    background: var(--danger-soft);
+    color: var(--danger);
+}
+
+/* ---------- Stat cards ---------- */
+
+.admin-stat-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+    gap: 16px;
+    margin-bottom: 26px;
+}
+
+.admin-stat-card {
+    background: var(--card);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-soft);
+    padding: 20px 22px;
+}
+
+.admin-stat-label {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 0.76rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+}
+
+.admin-stat-value {
+    margin-top: 8px;
+    font-family: 'Baloo 2', 'Quicksand', sans-serif;
+    font-size: 1.75rem;
+    font-weight: 700;
+    line-height: 1.1;
+}
+
+.admin-stat-value.is-money {
+    color: var(--money-green);
+}
+
+.admin-stat-sub {
+    margin-top: 4px;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+/* ---------- Panels ---------- */
+
+.admin-panel {
+    background: var(--card);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-soft);
+    margin-bottom: 24px;
+    overflow: hidden;
+}
+
+.admin-panel-head {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    padding: 18px 22px;
+    border-bottom: 1px solid var(--admin-line);
+}
+
+.admin-panel-title {
+    margin: 0;
+    font-size: 1.02rem;
+    font-weight: 700;
+}
+
+.admin-panel-sub {
+    margin: 3px 0 0;
+    font-size: 0.82rem;
+    color: var(--text-muted);
+}
+
+.admin-panel-actions {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.admin-panel-body {
+    padding: 22px;
+}
+
+.admin-columns {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 24px;
+    align-items: start;
+}
+
+/* ---------- Tables ---------- */
+
+.admin-table-wrap {
+    overflow-x: auto;
+}
+
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+}
+
+.admin-table th,
+.admin-table td {
+    padding: 12px 14px;
+    text-align: left;
+    white-space: nowrap;
+}
+
+/* Long emails must not push the action buttons out of view. */
+.admin-table .is-truncate {
+    max-width: 210px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.admin-table thead th {
+    font-size: 0.74rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    background: var(--bg);
+}
+
+.admin-table tbody tr {
+    border-top: 1px solid var(--admin-line);
+}
+
+.admin-table tbody tr:hover {
+    background: rgba(255, 159, 67, 0.06);
+}
+
+.admin-table .is-num {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+}
+
+.admin-table .is-wrap {
+    white-space: normal;
+}
+
+.admin-table-empty {
+    padding: 28px 22px;
+    text-align: center;
+    font-size: 0.92rem;
+    color: var(--text-muted);
+}
+
+.admin-cell-strong {
+    font-weight: 700;
+}
+
+.admin-cell-muted {
+    color: var(--text-muted);
+}
+
+/* ---------- Badges ---------- */
+
+.admin-badge {
+    display: inline-block;
+    padding: 3px 9px;
+    border-radius: 999px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    background: var(--bg);
+    color: var(--text-muted);
+}
+
+.admin-badge-admin {
+    background: rgba(255, 159, 67, 0.18);
+    color: var(--cta-amber-hover);
+}
+
+.admin-badge-you {
+    background: var(--money-green-soft);
+    color: var(--money-green);
+}
+
+.admin-badge-road { background: #e8eaed; color: #5f6672; }
+.admin-badge-residential { background: #e6f3e8; color: #3f8f4f; }
+.admin-badge-commercial { background: #e3eefb; color: #3f6fa8; }
+.admin-badge-industrial { background: #f3e9e2; color: #96674a; }
+.admin-badge-service { background: #fbe8e7; color: #c2564f; }
+.admin-badge-other { background: #f0eafb; color: #6f57a8; }
+
+/* ---------- Buttons ---------- */
+
+.admin-btn {
+    display: inline-block;
+    border: none;
+    border-radius: var(--radius-sm);
+    padding: 8px 15px;
+    font-family: inherit;
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background 0.15s ease, transform 0.15s ease, color 0.15s ease;
+}
+
+.admin-btn-primary {
+    background: var(--cta-amber);
+    color: #fff;
+}
+
+.admin-btn-primary:hover {
+    background: var(--cta-amber-hover);
+    transform: translateY(-1px);
+}
+
+.admin-btn-ghost {
+    background: var(--bg);
+    color: var(--text);
+}
+
+.admin-btn-ghost:hover {
+    background: rgba(255, 159, 67, 0.16);
+}
+
+.admin-btn-danger {
+    background: var(--danger-soft);
+    color: var(--danger);
+}
+
+.admin-btn-danger:hover {
+    background: var(--danger);
+    color: #fff;
+}
+
+.admin-btn-sm {
+    padding: 6px 11px;
+    font-size: 0.78rem;
+}
+
+.admin-inline-form {
+    display: inline;
+}
+
+.admin-action-row {
+    display: flex;
+    gap: 6px;
+    justify-content: flex-end;
+}
+
+/* ---------- Forms ---------- */
+
+.admin-form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+}
+
+.admin-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.admin-field label {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--text-muted);
+}
+
+.admin-field input,
+.admin-field select {
+    font-family: inherit;
+    font-size: 0.95rem;
+    padding: 10px 12px;
+    border-radius: var(--radius-sm);
+    border: 2px solid var(--bg);
+    background: var(--bg);
+    color: var(--text);
+    outline: none;
+    transition: border-color 0.15s ease;
+}
+
+.admin-field input:focus,
+.admin-field select:focus {
+    border-color: var(--cta-amber);
+}
+
+.admin-field-hint {
+    font-size: 0.76rem;
+    color: var(--text-muted);
+}
+
+.admin-form-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 18px;
+}
+
+.admin-search-form {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.admin-search-form input {
+    font-family: inherit;
+    font-size: 0.88rem;
+    padding: 8px 12px;
+    min-width: 220px;
+    border-radius: var(--radius-sm);
+    border: 2px solid var(--bg);
+    background: var(--bg);
+    color: var(--text);
+    outline: none;
+}
+
+.admin-search-form input:focus {
+    border-color: var(--cta-amber);
+}
+
+/* ---------- Compact table used inside editable rows ---------- */
+
+.admin-edit-input {
+    width: 92px;
+    font-family: inherit;
+    font-size: 0.85rem;
+    padding: 6px 8px;
+    border-radius: var(--radius-sm);
+    border: 2px solid var(--bg);
+    background: var(--bg);
+    color: var(--text);
+    outline: none;
+    text-align: right;
+}
+
+.admin-edit-input:focus {
+    border-color: var(--cta-amber);
+}
+
+.admin-edit-input.is-narrow {
+    width: 58px;
+}
+
+/* ---------- Definition list (detail pages) ---------- */
+
+.admin-dl {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 18px;
+    margin: 0;
+}
+
+.admin-dl dt {
+    font-size: 0.74rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+}
+
+.admin-dl dd {
+    margin: 5px 0 0;
+    font-size: 1.05rem;
+    font-weight: 700;
+}
+
+/* ---------- City tile map preview ---------- */
+
+.admin-map {
+    display: grid;
+    gap: 1px;
+    background: var(--admin-line);
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+    width: max-content;
+    max-width: 100%;
+}
+
+.admin-map-cell {
+    width: 20px;
+    height: 20px;
+    background: #f6f2e8;
+}
+
+.admin-map-cell.is-locked {
+    background: #e4ecdf;
+}
+
+.admin-map-cell.is-unlocked {
+    background: #ece0c4;
+}
+
+.admin-map-cell.is-road { background: #6c727c; }
+.admin-map-cell.is-residential { background: #7cc47f; }
+.admin-map-cell.is-commercial { background: #6fa8dc; }
+.admin-map-cell.is-industrial { background: #b58b6a; }
+.admin-map-cell.is-service { background: #e77b73; }
+.admin-map-cell.is-other { background: #a58ad6; }
+
+.admin-map-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin-top: 14px;
+    font-size: 0.78rem;
+    color: var(--text-muted);
+}
+
+.admin-map-legend span {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.admin-map-swatch {
+    width: 12px;
+    height: 12px;
+    border-radius: 3px;
+}
+
+/* ---------- Bar list (distribution charts) ---------- */
+
+.admin-bars {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.admin-bar-row {
+    display: grid;
+    grid-template-columns: 130px 1fr 52px;
+    align-items: center;
+    gap: 12px;
+    font-size: 0.86rem;
+}
+
+.admin-bar-track {
+    display: block;
+    height: 9px;
+    border-radius: 999px;
+    background: var(--bg);
+    overflow: hidden;
+}
+
+/* Must be block — the fill is a <span> and would otherwise ignore its width. */
+.admin-bar-fill {
+    display: block;
+    height: 100%;
+    min-width: 2px;
+    border-radius: 999px;
+    background: var(--cta-amber);
+}
+
+.admin-bar-count {
+    text-align: right;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+}
+
+/* ---------- Back link ---------- */
+
+.admin-back {
+    display: inline-block;
+    margin-bottom: 16px;
+    font-size: 0.86rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-decoration: none;
+}
+
+.admin-back:hover {
+    color: var(--cta-amber-hover);
+}
+
+/* ---------- Admin login screen ---------- */
+
+.admin-login-body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    margin: 0;
+    padding: 24px;
+}
+
+.admin-login-badge {
+    display: block;
+    width: max-content;
+    margin: 0 auto 14px;
+    padding: 5px 13px;
+    border-radius: 999px;
+    background: rgba(255, 159, 67, 0.18);
+    color: var(--cta-amber-hover);
+    font-size: 0.74rem;
+    font-weight: 700;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+}
+
+/* ---------- Responsive ---------- */
+
+@media (max-width: 860px) {
+    .admin-body {
+        flex-direction: column;
+    }
+
+    .admin-sidebar {
+        position: static;
+        width: 100%;
+        height: auto;
+        padding: 16px;
+    }
+
+    .admin-nav {
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+
+    .admin-sidebar-footer {
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+
+    .admin-main {
+        margin-left: 0;
+    }
+
+    .admin-topbar,
+    .admin-content {
+        padding-left: 18px;
+        padding-right: 18px;
+    }
+}

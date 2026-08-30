@@ -29,8 +29,10 @@
         formError.classList.remove('visible', 'success');
     }
 
-    function switchTab(tab) {
-        clearMessage();
+    function switchTab(tab, preserveMessage) {
+        if (!preserveMessage) {
+            clearMessage();
+        }
 
         authTabs.forEach(function (btn) {
             btn.classList.toggle('active', btn.dataset.tab === tab);
@@ -45,9 +47,45 @@
         }
     }
 
+    function requestedTab() {
+        try {
+            var requested = new URLSearchParams(window.location.search).get('auth');
+            return requested === 'register' ? 'register' : 'login';
+        } catch (e) {
+            return 'login';
+        }
+    }
+
     function showAuthScreen() {
         gameShell.classList.add('hidden');
         authScreen.classList.remove('hidden');
+        // Keep any pending flash message (e.g. "Session expired") that was shown before this ran.
+        switchTab(requestedTab(), true);
+    }
+
+    var FLASH_MESSAGE_KEY = 'smartcity_flash_message';
+
+    function showPendingFlashMessage() {
+        try {
+            var pending = sessionStorage.getItem(FLASH_MESSAGE_KEY);
+            if (pending) {
+                sessionStorage.removeItem(FLASH_MESSAGE_KEY);
+                showError(pending);
+            }
+        } catch (e) {
+            /* sessionStorage unavailable (e.g. private browsing) — nothing to show */
+        }
+    }
+
+    function reloadToAuthScreen(flashMessage) {
+        try {
+            if (flashMessage) {
+                sessionStorage.setItem(FLASH_MESSAGE_KEY, flashMessage);
+            }
+        } catch (e) {
+            /* ignore storage errors, message just won't survive the reload */
+        }
+        window.location.reload();
     }
 
     function showGameShell() {
@@ -57,7 +95,11 @@
 
         if (!threeSceneStarted) {
             threeSceneStarted = true;
-            import('./three-scene.js')
+            // Version query keeps the browser from reusing a stale cached module.
+            var sceneUrl = './three-scene.js'
+                + (window.__sceneVersion ? '?v=' + window.__sceneVersion : '');
+
+            import(sceneUrl)
                 .then(function (module) {
                     module.init();
                 })
@@ -85,6 +127,14 @@
             .then(function (response) { return response.json(); })
             .then(function (body) {
                 if (body.status === 'success') {
+                    // An admin restoring a session keeps access to the game, but
+                    // gets a way back to the panel rather than being stranded.
+                    if (body.data && body.data.is_admin) {
+                        var adminLink = document.getElementById('hud-admin-link');
+                        if (adminLink) {
+                            adminLink.classList.remove('hidden');
+                        }
+                    }
                     showGameShell();
                 } else {
                     showAuthScreen();
@@ -114,6 +164,13 @@
             .then(function (result) {
                 if (result.ok && result.body.status === 'success') {
                     loginForm.reset();
+
+                    // Admins belong in the admin panel, not in a player city.
+                    if (result.body.data && result.body.data.is_admin) {
+                        window.location.href = 'admin/index.php';
+                        return;
+                    }
+
                     showGameShell();
                 } else {
                     showError(result.body.message || 'Login failed.');
@@ -152,15 +209,17 @@
     });
 
     logoutBtn.addEventListener('click', function () {
-        fetch('api/logout.php', { method: 'POST', credentials: 'same-origin' })
-            .catch(function () { /* ignore network errors, still return to auth screen */ })
+        apiFetch('api/logout.php', { method: 'POST', credentials: 'same-origin' })
+            .catch(function () { /* ignore network errors, still reload to a clean slate */ })
             .then(function () {
-                loginForm.reset();
-                registerForm.reset();
-                switchTab('login');
-                showAuthScreen();
+                reloadToAuthScreen();
             });
     });
 
+    document.addEventListener('session:expired', function (event) {
+        reloadToAuthScreen((event.detail && event.detail.message) || 'Session expired — please log in again.');
+    });
+
+    showPendingFlashMessage();
     checkSession();
 })();

@@ -29,7 +29,7 @@ if ($email === '' || $password === '') {
 try {
     $pdo = getDbConnection();
 
-    $stmt = $pdo->prepare('SELECT id, name, password_hash FROM users WHERE email = :email LIMIT 1');
+    $stmt = $pdo->prepare('SELECT id, name, password_hash, is_admin FROM users WHERE email = :email LIMIT 1');
     $stmt->execute(['email' => $email]);
     $user = $stmt->fetch();
 
@@ -45,6 +45,9 @@ try {
     json_success([
         'id' => (int) $user['id'],
         'name' => $user['name'],
+        // Lets the front end send admins straight to the admin panel instead of
+        // dropping them into the game and auto-creating an empty city for them.
+        'is_admin' => (int) $user['is_admin'] === 1,
     ], 'Login successful.');
 } catch (Throwable $e) {
     error_log('Login failed: ' . $e->getMessage());

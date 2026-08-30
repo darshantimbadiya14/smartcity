@@ -1,0 +1,34 @@
+# Smart City Simulator — Apache config
+#
+# Asset caching.
+#
+# Without an explicit Cache-Control header, browsers fall back to *heuristic*
+# caching and can hold on to a stale style.css / ui.js / three-scene.js for a
+# long time. That meant code changes silently failed to reach players until they
+# hard-reloaded. Asset URLs now carry a ?v=<mtime> query (see includes/assets.php),
+# and "no-cache" here tells the browser it may keep a copy but must revalidate
+# before using it — so an updated file is always picked up, while unchanged files
+# still cost only a cheap 304.
+
+<IfModule mod_headers.c>
+    <FilesMatch "\.(js|css)$">
+        Header set Cache-Control "no-cache, must-revalidate"
+    </FilesMatch>
+
+    # HTML/PHP responses should never be cached — they carry session state.
+    <FilesMatch "\.(php|html)$">
+        Header set Cache-Control "no-store, no-cache, must-revalidate, max-age=0"
+    </FilesMatch>
+</IfModule>
+
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresByType text/css "access plus 0 seconds"
+    ExpiresByType application/javascript "access plus 0 seconds"
+    ExpiresByType text/javascript "access plus 0 seconds"
+</IfModule>
+
+# Never serve the environment file, even if it is somehow requested directly.
+<FilesMatch "^\.env">
+    Require all denied
+</FilesMatch>

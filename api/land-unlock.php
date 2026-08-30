@@ -103,6 +103,28 @@ try {
 
     $pdo->beginTransaction();
     try {
+        $lockStmt = $pdo->prepare('SELECT budget FROM cities WHERE id = :city_id FOR UPDATE');
+        $lockStmt->execute(['city_id' => $cityId]);
+        $lockedCity = $lockStmt->fetch();
+        $lockedBudget = (float) $lockedCity['budget'];
+
+        $recheckExistsStmt = $pdo->prepare(
+            'SELECT 1 FROM city_tiles WHERE city_id = :city_id AND tile_x = :tile_x AND tile_y = :tile_y'
+        );
+        $recheckExistsStmt->execute(['city_id' => $cityId, 'tile_x' => $tileX, 'tile_y' => $tileY]);
+
+        if ($recheckExistsStmt->fetch() !== false) {
+            $pdo->rollBack();
+            json_error('This tile is already unlocked.', 409);
+            exit;
+        }
+
+        if ($lockedBudget < $tileUnlockCost) {
+            $pdo->rollBack();
+            json_error('Not enough budget to unlock this tile.', 422);
+            exit;
+        }
+
         $deduct = $pdo->prepare('UPDATE cities SET budget = budget - :cost_deduct WHERE id = :city_id AND budget >= :cost_check');
         $deduct->execute(['cost_deduct' => $tileUnlockCost, 'cost_check' => $tileUnlockCost, 'city_id' => $cityId]);
 

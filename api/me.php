@@ -21,7 +21,7 @@ if ($userId === null) {
 try {
     $pdo = getDbConnection();
 
-    $stmt = $pdo->prepare('SELECT id, name FROM users WHERE id = :id LIMIT 1');
+    $stmt = $pdo->prepare('SELECT id, name, email, is_admin FROM users WHERE id = :id LIMIT 1');
     $stmt->execute(['id' => $userId]);
     $user = $stmt->fetch();
 
@@ -33,6 +33,8 @@ try {
     json_success([
         'id' => (int) $user['id'],
         'name' => $user['name'],
+        'email' => $user['email'],
+        'is_admin' => (int) $user['is_admin'] === 1,
     ]);
 } catch (Throwable $e) {
     error_log('Fetching current user failed: ' . $e->getMessage());

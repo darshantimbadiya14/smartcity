@@ -18,12 +18,6 @@ function getDbConnection(): PDO
         return new PDO($dsn, DB_USER, DB_PASS, $options);
     } catch (PDOException $e) {
         error_log('Database connection failed: ' . $e->getMessage());
-        // TEMPORARY DEBUG: full exception detail goes only to a local, gitignored file.
-        file_put_contents(
-            __DIR__ . '/../debug.log',
-            '[' . date('Y-m-d H:i:s') . '] ' . $e->getMessage() . PHP_EOL,
-            FILE_APPEND
-        );
         throw new RuntimeException('Database connection failed.');
     }
 }
